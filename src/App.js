@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import TaskForm from "./components/TaskForm";
+import TaskColumn from "./components/TaskColumn";
+import todoIcon from "./assets/direct-hit.png";
+import doingIcon from "./assets/glowing-star.png";
+import doneIcon from "./assets/check-mark-button.png";
 
-function App() {
+const oldTasks = localStorage.getItem('tasks');
+
+const App = () => {
+  const [tasks, setTasks] = useState([]);
+  const handleDelete = (taskIndex) => {
+    const newTasks = tasks.filter((task, index) => {
+      return index !== taskIndex;
+    });
+    setTasks(newTasks);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <TaskForm setTasks={setTasks} />
+      <main className="app_main">
+        <TaskColumn
+          title="Doing"
+          icon={doingIcon}
+          tasks={tasks}
+          status="doing"
+          handleDelete={handleDelete}
+        />
+        <TaskColumn
+          title="Done"
+          icon={doneIcon}
+          tasks={tasks}
+          status="done"
+          handleDelete={handleDelete}
+        />
+        <TaskColumn
+          title="To do"
+          icon={todoIcon}
+          tasks={tasks}
+          status="todo"
+          handleDelete={handleDelete}
+        />
+      </main>
     </div>
   );
-}
+};
 
 export default App;
